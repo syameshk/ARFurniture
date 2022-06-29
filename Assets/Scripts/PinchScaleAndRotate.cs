@@ -1,25 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Utilities;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class PinchScaleAndRotate : MonoBehaviour
 {
     public bool invertScale = true;
 
-    Touch[] touches;
+    ReadOnlyArray<Touch> touches;
     bool isFirstFrameWithTwoTouches = true;
     float cachedTouchAngle;
     float cachedTouchDistance;
 
     void Update()
     {
-        this.touches = Input.touches;
+        
+        this.touches = Touch.activeTouches;
 
         if (Input.touchCount == 2)
         {
-            float currentTouchDistance = Vector2.Distance(this.touches[0].position, this.touches[1].position);
-            float diff_y = this.touches[0].position.y - this.touches[1].position.y;
-            float diff_x = this.touches[0].position.x - this.touches[1].position.x;
+            float currentTouchDistance = Vector2.Distance(this.touches[0].screenPosition, this.touches[1].screenPosition);
+            float diff_y = this.touches[0].screenPosition.y - this.touches[1].screenPosition.y;
+            float diff_x = this.touches[0].screenPosition.x - this.touches[1].screenPosition.x;
             float currentTouchAngle = Mathf.Atan2(diff_y, diff_x) * Mathf.Rad2Deg;
 
             if (this.isFirstFrameWithTwoTouches)

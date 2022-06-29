@@ -24,9 +24,10 @@ public class PlaceObjects : MonoBehaviour
 
     ARRaycastManager m_RaycastManager;
 
-    static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
+    
     [SerializeField]
     bool m_CanReposition = true;
+    float m_RepositionDelay = 0.25f;
 
     void Awake()
     {
@@ -43,18 +44,16 @@ public class PlaceObjects : MonoBehaviour
     {
         //Debug.Log("PlaceObjects Update "+Input.mousePosition);
         //Debug.Log(Touch.activeFingers.Count + Touch.activeFingers.Count);
-        if (Touch.activeTouches.Count > 0)
+        if (Touch.activeTouches.Count == 1)
         {
-            Debug.Log("PlaceObjects Update "+ Touch.activeTouches.Count);
+            //Debug.Log("PlaceObjects Update "+ Touch.activeTouches.Count);
             Touch touch = Touch.activeTouches[0];
 
             if (touch.phase == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                if (m_RaycastManager.Raycast(touch.screenPosition, s_Hits, TrackableType.PlaneWithinPolygon))
+                if(RaycastHitCheck(touch.screenPosition, out hitPose))
                 {
-                    Pose hitPose = s_Hits[0].pose;
-
-                    if(spawnedObject == null)
+                    if (spawnedObject == null)
                     {
                         Debug.Log("Added object");
                         spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
@@ -64,6 +63,7 @@ public class PlaceObjects : MonoBehaviour
                             onPlacedObject.Invoke();
                         }
                     }
+                    /*
                     else
                     {
                         if (m_CanReposition)
@@ -71,11 +71,53 @@ public class PlaceObjects : MonoBehaviour
                             spawnedObject.transform.SetPositionAndRotation(hitPose.position, hitPose.rotation);
                         }
                     }
-
-                    
+                    */
                 }
+            }else if(touch.phase == UnityEngine.InputSystem.TouchPhase.Moved && m_CanReposition)
+            {
+                //If we touched for a certain time, we can move object
+                if(touch.time - touch.startTime > m_RepositionDelay)
+                {
+                    if(RaycastHitCheck(touch.screenPosition, out hitPose))
+                    {
+                        if (spawnedObject != null)
+                            spawnedObject.transform.SetPositionAndRotation(hitPose.position, hitPose.rotation);
+                    }
+                    /*
+                    if (m_RaycastManager.Raycast(touch.screenPosition, s_Hits, TrackableType.PlaneWithinPolygon))
+                    {
+                        Pose hitPose = s_Hits[0].pose;
+                        if (spawnedObject != null)
+                            spawnedObject.transform.SetPositionAndRotation(hitPose.position, hitPose.rotation);
+                    }
+                    */
+                }
+                
             }
         }
+    }
+    static Pose hitPose;
+    static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
+#if UNITY_EDITOR
+    static RaycastHit hit;
+#endif
+    private bool RaycastHitCheck(Vector2 screenPosition, out Pose pose)
+    {
+        pose = default;
+#if UNITY_EDITOR
+        //To check in editor
+        if(Physics.Raycast(Camera.main.ScreenPointToRay(screenPosition), out hit))
+        {
+            pose = new Pose(hit.point, Quaternion.identity);
+            return true;
+        }
+#endif
+        if (m_RaycastManager.Raycast(screenPosition, s_Hits, TrackableType.PlaneWithinPolygon))
+        {
+            pose = s_Hits[0].pose;
+            return true;
+        }
+        return false;
     }
 
     [ContextMenu("ForcePlaceItem")]

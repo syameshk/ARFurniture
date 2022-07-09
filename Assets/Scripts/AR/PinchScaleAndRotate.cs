@@ -18,7 +18,7 @@ public class PinchScaleAndRotate : MonoBehaviour
         
         this.touches = Touch.activeTouches;
 
-        if (Input.touchCount == 2)
+        if (touches.Count == 2)
         {
             float currentTouchDistance = Vector2.Distance(this.touches[0].screenPosition, this.touches[1].screenPosition);
             float diff_y = this.touches[0].screenPosition.y - this.touches[1].screenPosition.y;

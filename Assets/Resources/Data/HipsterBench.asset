@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ee1dd9ff61b0094aaeb3a3cf15ea163, type: 3}
+  m_Name: HipsterBench
+  m_EditorClassIdentifier: 
+  Name: HipsterBench
+  Title: Hipster Bench
+  ShortDescription: Hal Ply Tube - HipsterBench
+  Description: 'The combained HAL Armchair completes the HAL family.
+
+    Four-legged
+    base in tubular steel, non-stackable, chrome-plates or powder-coated in ivory
+    or basic dark.'
+  Cost: 6999
+  Images:
+  - {fileID: 21300000, guid: bf3af26234e16564589e706655683b1e, type: 3}
+  - {fileID: 21300000, guid: 38650afc23660964599c2a61f0b37fd4, type: 3}
+  Model: {fileID: 843498439373056990, guid: 15ae9bb965f8ecd449f1ea147ecb1ed9, type: 3}

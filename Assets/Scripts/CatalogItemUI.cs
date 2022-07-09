@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using TMPro;
+
 
 public class CatalogItemUI : MonoBehaviour, IPointerClickHandler
 {
@@ -9,6 +12,16 @@ public class CatalogItemUI : MonoBehaviour, IPointerClickHandler
     CatalogItemSelect select;
     [SerializeField]
     private CatalogItem item;
+
+    public TextMeshProUGUI title;
+    public TextMeshProUGUI description;
+    public Image icon;
+
+    void Start()
+    {
+        //Init(item);
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("OnPointerClick");
@@ -31,5 +44,9 @@ public class CatalogItemUI : MonoBehaviour, IPointerClickHandler
     public void Init(CatalogItem item)
     {
         this.item = item;
+        this.title.text = item.Title;
+        this.description.text = item.ShortDescription;
+        this.icon.sprite = item.Images[0];
+
     }
 }

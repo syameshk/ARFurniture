@@ -141,4 +141,12 @@ public class PlaceObjects : MonoBehaviour
             }
         }
     }
+
+    private void OnDestroy()
+    {
+
+        if (spawnedObject != null)
+            Destroy(spawnedObject);
+        spawnedObject = null;
+    }
 }

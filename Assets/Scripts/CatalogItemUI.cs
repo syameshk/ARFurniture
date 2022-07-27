@@ -8,8 +8,7 @@ using TMPro;
 
 public class CatalogItemUI : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField]
-    CatalogItemSelect select;
+    
     [SerializeField]
     private CatalogItem item;
 
@@ -30,15 +29,16 @@ public class CatalogItemUI : MonoBehaviour, IPointerClickHandler
 
     public void OnClick()
     {
-        Debug.Log("OnClick");
-        if (select != null && this.item != null)
-            select.Selected = item;
+        //Show Item Deatils
+        CatalogViewUI catalogViewUI = GetComponentInParent<CatalogViewUI>(true);
+        if(catalogViewUI != null)
+        {
+            catalogViewUI.OnItemSelected(item);
+        }
         else
-            Debug.LogWarning("Could not set selected Item");
-
-        SceneHelper helper = FindObjectOfType<SceneHelper>();
-        if (helper != null)
-            helper.LoadARView();
+        {
+            Debug.LogWarning("Could not find CatalogViewUI");
+        }
     }
 
     public void Init(CatalogItem item)
